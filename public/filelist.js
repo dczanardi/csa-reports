@@ -113,6 +113,6 @@ addReport({ alunos: "relatorio-CSA_MUN_PP-ACNUR_-_T1_-_EUA_-_Helena_Guerekmezian
 addReport({ alunos: "relatorio-CSA_MUN_PP-ACNUR_-_T1_-_Bangladesh_-_Sofia_Nader_Gomes_de_Carvalho_-_9C,_Laura_Trujillo_de_Almeida_Rodrigues_-_9A", href: "reports/relatorio-CSA_MUN_PP-ACNUR_-_T1_-_Bangladesh_-_Sofia_Nader_Gomes_de_Carvalho_-_9C,_Laura_Trujillo_de_Almeida_Rodrigues_-_9A.html" });
 addReport({ alunos: "relatorio-CSA_MUN_PP-ACNUR_-_T1_-_Etiópia_-_Maria_de_Guadalupe_de_Souza_Aranha_Porto_-_9A_Maria_Luísa_de_Toledo_Pacheco_Mazerino_Sobral_-_9C", href: "reports/relatorio-CSA_MUN_PP-ACNUR_-_T1_-_Eti%C3%B3pia_-_Maria_de_Guadalupe_de_Souza_Aranha_Porto_-_9A_Maria_Lu%C3%ADsa_de_Toledo_Pacheco_Mazerino_Sobral_-_9C.html" });
 addReport({ alunos: "relatorio-CSA_MUN_PP-UNICEF_-_T1_-_Canadá_-_Isabella_Pimentel_Bianchini_-_9A,_Maria_Fernanda_Tinoco_Cabral_Maia_Jacinto_-_9A", href: "reports/relatorio-CSA_MUN_PP-UNICEF_-_T1_-_Canad%C3%A1_-_Isabella_Pimentel_Bianchini_-_9A,_Maria_Fernanda_Tinoco_Cabral_Maia_Jacinto_-_9A.html" });
-addReport({ alunos: "Nomes que você quer mostrar na lista", href: "reports/relatorio-CSA_MUN_PP-OTAN-T1-Croácia-HenriquePinaRibeiro-1.C.html" });
+addReport({ alunos: "relatorio-CSA_MUN_PP-OTAN-T1-Croácia-HenriquePinaRibeiro-1.C.html", href: "reports/relatorio-CSA_MUN_PP-OTAN-T1-Croácia-HenriquePinaRibeiro-1.C.html" });
 addReport({ alunos: "NOME_DO_ARQUIVO", href: "reports/NOME_DO_ARQUIVO.html" });
 })();
