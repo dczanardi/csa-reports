@@ -1,11 +1,12 @@
 ﻿(function(){
   const tbody = document.querySelector("tbody");
   function addReport(r){
-    const tr = document.createElement("tr");
-    tr.innerHTML =
-      "<td>"+r.alunos+"</td>" +
-      "<td><a href=\""+r.href+"\" target=\"_blank\" rel=\"noopener\">abrir</a></td>";
-    tbody.appendChild(tr);
+  const tr = document.createElement("tr");
+  const url = "viewer.html?file=" + encodeURIComponent(r.href);
+  tr.innerHTML =
+    "<td>"+r.alunos+"</td>" +
+    "<td><a href=\"" + url + "\" target=\"_blank\" rel=\"noopener\">abrir</a></td>";
+  tbody.appendChild(tr);
   }
 addReport({ alunos: "relatorio-CSA_MUN_PP-CPCJC_-_T1_-_EUA_-_Thomaz_Conde_Soubihe_-_9C,_João_Paulo_Solera_Clemente_-_9C", href: "reports/relatorio-CSA_MUN_PP-CPCJC_-_T1_-_EUA_-_Thomaz_Conde_Soubihe_-_9C,_Jo%C3%A3o_Paulo_Solera_Clemente_-_9C.html" });
 addReport({ alunos: "relatorio-CSA_MUN_PP-UNODC_-_T1_-_Brasil_-_Rafaela_Sorbo_Aguiar_-_1.C,_Camila_Cantoni_Rosa_-_1.A", href: "reports/relatorio-CSA_MUN_PP-UNODC_-_T1_-_Brasil_-_Rafaela_Sorbo_Aguiar_-_1.C,_Camila_Cantoni_Rosa_-_1.A.html" });
