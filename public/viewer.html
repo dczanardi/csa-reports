@@ -53,12 +53,12 @@
   <div class="wrap">
     <div class="header">
       <div class="logos">
-        <div class="logo" id="logoPrimary"><span>CSA</span></div>
-        <div class="logo" id="logoSecondary" style="display:none"></div>
+        <div class="logo" id="brand-left"  style="display:none"><img alt="logo"></div>
+        <div class="logo" id="brand-right" style="display:none"><img alt="logo"></div>
       </div>
       <div>
-        <div class="title" id="brandTitle">Correções — Reports</div>
-        <div class="subtitle" id="brandSubtitle">Relatórios com rubrica</div>
+        <div class="title"    id="site-title">Correções — Reports</div>
+        <div class="subtitle" id="breadcrumb">Relatórios com rubrica</div>
       </div>
       <div class="meta" id="meta"></div>
     </div>
@@ -74,43 +74,76 @@
   </div>
 
   <script>
-    // 1) Carrega configuração de branding
+    // Carrega branding.json (preferido). Se não existir, tenta config.json (compat).
     async function loadBranding(){
-      try{
-        const res = await fetch('/branding/config.json', {cache:'no-store'});
-        if(!res.ok) throw new Error('config não encontrado');
-        const cfg = await res.json();
+      let cfg = null;
 
-        // Cores
-        if(cfg.accentColor) document.documentElement.style.setProperty('--brand', cfg.accentColor);
-        if(cfg.background)  document.documentElement.style.setProperty('--bg', cfg.background);
-        if(cfg.textColor)   document.documentElement.style.setProperty('--ink', cfg.textColor);
-        if(cfg.mutedColor)  document.documentElement.style.setProperty('--muted', cfg.mutedColor);
-        if(cfg.cardColor)   document.documentElement.style.setProperty('--card', cfg.cardColor);
-        if(cfg.borderColor) document.documentElement.style.setProperty('--border', cfg.borderColor);
-
-        // Títulos
-        document.getElementById('brandTitle').textContent   = cfg.brandTitle || 'Correções — Reports';
-        document.getElementById('brandSubtitle').textContent= cfg.brandSubtitle || 'Relatórios com rubrica';
-
-        // Logos
-        const p = document.getElementById('logoPrimary');
-        const s = document.getElementById('logoSecondary');
-
-        if(cfg.primaryLogo){
-          p.innerHTML = `<img alt="logo principal" src="${cfg.primaryLogo}">`;
-        }
-        if(cfg.secondaryLogo){
-          s.style.display = '';
-          s.innerHTML = `<img alt="logo secundário" src="${cfg.secondaryLogo}">`;
-        }
-      }catch(e){
-        // Mantém defaults se não houver config
-        console.warn('Branding default em uso:', e.message);
+      async function tryLoad(url){
+        const r = await fetch(url, {cache:'no-store'});
+        if (r.ok) return r.json();
+        return null;
       }
+
+      // 1) Novo formato
+      cfg = await tryLoad('/branding/branding.json');
+
+      // 2) Legado (config.json)
+      if(!cfg){
+        const legacy = await tryLoad('/branding/config.json');
+        if(legacy){
+          cfg = {
+            title: legacy.brandTitle,
+            breadcrumb: legacy.brandSubtitle,
+            logos: {
+              left:  legacy.primaryLogo  || null,
+              right: legacy.secondaryLogo|| null
+            },
+            colors: {
+              accent: legacy.accentColor,
+              bg:     legacy.background,
+              text:   legacy.textColor,
+              muted:  legacy.mutedColor,
+              card:   legacy.cardColor,
+              border: legacy.borderColor
+            }
+          };
+        }
+      }
+
+      if(!cfg) return; // mantém os defaults
+
+      // Cores (se houver)
+      const colors = cfg.colors || {};
+      if(colors.accent) document.documentElement.style.setProperty('--brand',  colors.accent);
+      if(colors.bg)     document.documentElement.style.setProperty('--bg',     colors.bg);
+      if(colors.text)   document.documentElement.style.setProperty('--ink',    colors.text);
+      if(colors.muted)  document.documentElement.style.setProperty('--muted',  colors.muted);
+      if(colors.card)   document.documentElement.style.setProperty('--card',   colors.card);
+      if(colors.border) document.documentElement.style.setProperty('--border', colors.border);
+
+      // Títulos
+      if(cfg.title)     document.getElementById('site-title').textContent = cfg.title;
+      if(cfg.breadcrumb)document.getElementById('breadcrumb').textContent = cfg.breadcrumb;
+
+      // Logos
+      const leftBox  = document.getElementById('brand-left');
+      const rightBox = document.getElementById('brand-right');
+
+      function setLogo(box, url){
+        if(url){
+          box.style.display = 'inline-flex';
+          box.querySelector('img').src = url;
+        }else{
+          box.style.display = 'none';
+          box.querySelector('img').removeAttribute('src');
+        }
+      }
+
+      setLogo(leftBox,  cfg.logos?.left  || null);
+      setLogo(rightBox, cfg.logos?.right || null);
     }
 
-    // 2) Lê ?file=reports/xxx.html e mostra no iframe
+    // Abre ?file=reports/xxx.html no iframe
     function openReportFromQuery(){
       const params = new URLSearchParams(location.search);
       const file = params.get('file');
@@ -129,13 +162,15 @@
       try{
         const nice = decodeURIComponent(file).split('/').pop();
         fileNameEl.textContent = 'Arquivo: ' + nice;
-      }catch(e){ fileNameEl.textContent = 'Arquivo: ' + file; }
+      }catch(e){
+        fileNameEl.textContent = 'Arquivo: ' + file;
+      }
 
       // Carrega o relatório real
       frame.src = '/' + file.replace(/^\/+/, '');
     }
 
-    // 3) Data/hora
+    // Data/hora no topo
     document.getElementById('meta').textContent = new Date().toLocaleString('pt-BR');
 
     // Inicialização
